@@ -7,8 +7,6 @@ import string
 import os, sys
 import glob
 
-PyVersion = sys.version_info[0] 
-
 def get_pixel_size(tifimage):
     """ 
     Returns: u'Image Pixel Size = 1.861 nm'
@@ -17,8 +15,8 @@ def get_pixel_size(tifimage):
         from PIL import Image
         tifimage = Image.open(f)
     """
-    item_4_1 = list(tifimage.tag.items())[4][1]
-    lines = list(tifimage.tag.items())[4][1].split('\r\n')
+    item_4_1 = tifimage.tag.items()[4][1]
+    lines = tifimage.tag.items()[4][1].split('\r\n')
     
     entry = None
     
@@ -27,16 +25,12 @@ def get_pixel_size(tifimage):
             line.encode('utf-8')
             entry = line
             break
-            
-    if PyVersion == 2:
-        entry = entry.split('=')[1].encode('utf-8')
-        all_not_digits = string.ascii_letters + '.' + ' ' + 'µ'
-        number = float(entry.translate(None, all_not_digits))
-        dim    = entry.translate(None, string.digits + '.' + ' ')
-    elif PyVersion == 3:
-        entry  = str(entry.split('=')[1])
-        number = float(''.join(i for i in entry if i.isdigit()))
-        dim    = ''.join(i for i in entry if i.isalpha())
+        
+    entry  = entry.split('=')[1].encode('utf-8')
+
+    all_not_digits = string.letters + '.' + ' ' + 'µ'
+    number = float(entry.translate(None, all_not_digits))
+    dim    = entry.translate(None, string.digits + '.' + ' ')
     
     if dim == 'nm':
         number = number * 1e-9 
