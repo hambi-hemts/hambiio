@@ -1,0 +1,22 @@
+[SLOWSCAN]
+Bitmap=IMAGE296.bmp
+LowerLeftUV=1.245026,5.214103
+UpperRightUV=1.254976,5.224053
+LocalOriginUV=1.250001,5.219078
+StageUV=1.250001,5.209998
+RotationUV=0
+[METADATA]
+User=Hambitzer
+Project=%UserRoot%PROJECT\FIRST EBL II.DSK
+Date=2015/10/31
+Time=12:41:26
+Magnification=500x
+Write field=200µm
+FoV=10.0µm
+Detector=SE2
+Focus/WD=10.241mm
+Probe Current=0.0349nA
+Acc. Voltage=30.0kV
+Active Mode=no active dataset
+Position U=1.2500mm
+Position V=5.2191mm

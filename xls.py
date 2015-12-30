@@ -49,7 +49,7 @@ def get_row_index_by_name(workbook, worksheet, row_name, column = 'A'):
     wb = workbook
     ws = worksheet
     
-    max_row = ws.get_highest_row() 
+    max_row = ws.max_row#get_highest_row() 
     #max_col = openpyxl.cell.get_column_letter(max_col)
     
     search_range = column+str(1)+':'+column+str(max_row)
@@ -57,7 +57,7 @@ def get_row_index_by_name(workbook, worksheet, row_name, column = 'A'):
     for row in ws.iter_rows(search_range):
         for mycell in row:
             if mycell.value == row_name:
-                xy = openpyxl.cell.coordinate_from_string(mycell.coordinate)
+                xy = openpyxl.utils.coordinate_from_string(mycell.coordinate)
                 return xy[1] 
 
 def load2dict(worksheet, dev_id):
@@ -82,3 +82,37 @@ def load2dict(worksheet, dev_id):
     the_dict = {keys[i] : values[i] for i in arange(len(keys))}
 
     return the_dict
+    
+def get_value_in_column_by_other_columns(column_letter, other_row_values, other_column_letters, worksheet, return_row = False): 
+    """ 
+    input: 
+        list of values expected in other columns 
+        if this list of values is found the value in 'column_letter' is returned.
+    
+    usage example: 
+        wb = openpyxl.load_workbook('test.xlsx', data_only = True)
+        ws = wb.get_sheet_by_name('Sheet1')
+        get_value_in_column_by_other_columns('C', ['A 6', 2.95], ['A', 'B'], ws)
+    """
+    other_column_letter_inds = [openpyxl.cell.column_index_from_string(x) for x in other_column_letters]
+    column_letter_ind       = openpyxl.cell.column_index_from_string(column_letter)
+    
+    cell_value = None
+    
+    curr_row = 1
+    
+    while curr_row < 1000:
+
+        cell_values = [worksheet.cell(row = curr_row, column = x).value for x in other_column_letter_inds]
+        
+        if cell_values == other_row_values:
+            
+            cell_value = worksheet.cell(row = curr_row, column = column_letter_ind).value
+        
+            break
+            
+        curr_row += 1
+    if return_row: 
+        return cell_value, curr_row - 1
+    else: 
+        return cell_value
