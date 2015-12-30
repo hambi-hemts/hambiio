@@ -30,16 +30,26 @@ def get_pixel_size(tifimage):
             
     if PyVersion == 2:
         entry = entry.split('=')[1].encode('utf-8')
-        all_not_digits = string.ascii_letters + '.' + ' ' + 'µ'
+        ### changelog: changed the code for the number extraction, such that Pixel Size = 14.97 nm is correctly read in:
+        #old line:
+        #all_not_digits = string.ascii_letters + '.' + ' ' + 'µ'
+        #new line:
+        all_not_digits = string.ascii_letters + ' ' + 'µ'
         number = float(entry.translate(None, all_not_digits))
         dim    = entry.translate(None, string.digits + '.' + ' ')
     elif PyVersion == 3:
         entry  = str(entry.split('=')[1])
-        number = float(''.join(i for i in entry if i.isdigit()))
+        ### changelog: changed the code for the number extraction, such that Pixel Size = 14.97 nm is correctly read in:
+        #old line:
+        #number = float(''.join(i for i in entry if i.isdigit()))
+        #new line:
+        number = float(''.join(i for i in entry if (i.isdigit() or i == '.')))
         dim    = ''.join(i for i in entry if i.isalpha())
     
     if dim == 'nm':
         number = number * 1e-9 
+    elif dim == 'pm':
+        number = number * 1e-12
     elif dim == 'µm':
         number = number * 1e-6
     elif dim == 'mm':
