@@ -1,5 +1,6 @@
 from inspect import signature
 
+
 class ListTable(list):
     """ Overridden list class which takes a 2-dimensional list of
         the form [[1,2,3],[4,5,6]], and renders an HTML Table in
@@ -17,6 +18,7 @@ class ListTable(list):
         html.append("</table>")
         return ''.join(html)
 
+
 def make_table(column1,*kwargs):
     """
     :param column1:
@@ -29,6 +31,7 @@ def make_table(column1,*kwargs):
         tba = [x[i] for x in kwargs]
         table.append([f0[i]]+tba)
     return table
+
 
 def make_table_of_class_functions(a_class):
     """
